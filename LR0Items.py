@@ -21,7 +21,31 @@ class LR0Items:
         for tup in self.aug_productions:
             print("%s->%s" % (tup[0], tup[1]))
 
+    def dotBeforeNonTerminal(self, RHS):
+        regex = re.compile(r'@([A-Z])')
+        result = regex.search(RHS)
+        return False if not result else result.group(1).strip('@')
 
-x = LR0Items()
-x.printAugmentedGrammar()
+    def closure(self, LHS, RHS):
+        J = [(LHS, RHS)]
+        added = True
+        while(added):
+            added = False
+            for item in J:
+                nextClosureChar = self.dotBeforeNonTerminal(item[1])
+                if nextClosureChar:
+                    for prod in self.aug_productions[1:]:
+                        if prod[0] == nextClosureChar:
+                            newProd = (prod[0], "@%s" % prod[1])
+                            J.append(newProd)
+                            added = True
+        return J
+
+    def items(self):
+        C = self.closure("'", "@E")
+        print(C)
+
+lr0Items = LR0Items()
+lr0Items.printAugmentedGrammar()
 print("\nSets of LR(0) Items\n-------------------")
+print(lr0Items.items())
