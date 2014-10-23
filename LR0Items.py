@@ -28,12 +28,14 @@ class LR0Items:
 
     def closure(self, LHS, RHS):
         J = [(LHS, RHS)]
+        done = []
         added = True
         while(added):
             added = False
             for item in J:
                 nextClosureChar = self.dotBeforeNonTerminal(item[1])
-                if nextClosureChar:
+                if nextClosureChar and nextClosureChar not in done:
+                    done.append(nextClosureChar)
                     for prod in self.aug_productions[1:]:
                         if prod[0] == nextClosureChar:
                             newProd = (prod[0], "@%s" % prod[1])
