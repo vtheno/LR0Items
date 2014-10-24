@@ -1,22 +1,16 @@
-import cutest as unittest
+import unittest
 import re
 from LR0Items import LR0Items
 
 class TestLR0Items(unittest.TestCase):
 
     def setUp(self):
-        self.aug_productions = [
-            ("'", '->E'), 
-            ('E', 'E+T'), 
-            ('E', 'T'), 
-            ('T', 'T*F'), 
-            ('T', 'F'), 
-            ('F', '(E)'), 
-            ('F', 'i')
-        ]
+        starting_productions = open("input.txt")
+        self.lr0Items = LR0Items(starting_productions)
+        
     def testProductionsProperlyInitialized(self):
-        self.assertEqual(self.aug_productions[1][1], 'E+T')
-        self.assertEqual(len(self.aug_productions), 7)
+        self.assertEqual(self.lr0Items.aug_productions[1][1], 'E+T')
+        self.assertEqual(len(self.lr0Items.aug_productions), 7)
 
     def testListOfTuples(self):
         L = [("E", "@E")]
@@ -46,6 +40,9 @@ class TestLR0Items(unittest.TestCase):
         self.assertEqual(LR0Items.dotBeforeNonTerminal("@+Gaaaa"), False)
         self.assertEqual(LR0Items.dotBeforeNonTerminal("-FGaaaa@b"), False)
         self.assertEqual(LR0Items.dotBeforeNonTerminal("aaaa@aGaaaa"), False)
+
+    def tearDown(self):
+        close(input)
 
 if __name__ == '__main__':
 	unittest.main()

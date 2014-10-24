@@ -8,8 +8,11 @@ import sys
 
 class LR0Items:
 
-    def __init__(self):
-        self.productions = [x.strip() for x in sys.stdin]
+    def __init__(self, fileName=False):
+        starting_productions = sys.stdin
+        if fileName:
+            starting_productions = open(fileName)
+        self.productions = [x.strip() for x in starting_productions]
         self.aug_productions = [("'", "%s" % self.productions[0])]
         regex = re.compile(r'([A-Z])->(.*)')
         for p in self.productions[1:]:
