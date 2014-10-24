@@ -52,6 +52,12 @@ class TestLR0Items(unittest.TestCase):
         self.assertEqual(closure_result[5], ("F", "@(E)"))
         self.assertEqual(closure_result[6], ("F", "@i"))
         
+    def testCreateListOfSymbols(self):
+        lr0Items = LR0Items("input.txt")
+        self.assertEqual(lr0Items.symbols, ['E', '+', 'T', '*', 'F', '(', ')', 'i'])
 
+    def testGoto(self):
+        lr0Items = LR0Items("input.txt")
+        
 if __name__ == '__main__':
 	unittest.main()
