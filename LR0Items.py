@@ -18,6 +18,7 @@ class LR0Items:
         for p in self.productions[1:]:
             m = regex.match(p)
             self.aug_productions.append((m.group(1), m.group(2)))
+        starting_productions.close()
 
     def printAugmentedGrammar(self):
         print("\nAugmented Grammar\n-----------------")
