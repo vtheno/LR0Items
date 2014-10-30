@@ -33,13 +33,13 @@ class TestLR0Items(unittest.TestCase):
 
     def testDotBeforeNonTerminal(self):
         lr0Items = LR0Items("input.txt")
-        self.assertEqual(lr0Items.dotBeforeNonTerminal("@FGaaaa"), 'F')
-        self.assertEqual(lr0Items.dotBeforeNonTerminal("aaafa_0-=@K"), 'K')
-        self.assertEqual(lr0Items.dotBeforeNonTerminal("aaaaaaaa@FGaaaa"), 'F')
-        self.assertEqual(lr0Items.dotBeforeNonTerminal("@M"), 'M')
-        self.assertEqual(lr0Items.dotBeforeNonTerminal("@+Gaaaa"), False)
-        self.assertEqual(lr0Items.dotBeforeNonTerminal("-FGaaaa@b"), False)
-        self.assertEqual(lr0Items.dotBeforeNonTerminal("aaaa@aGaaaa"), False)
+        self.assertEqual(lr0Items.dotBeforeSymbol("@FGaaaa", True), 'F')
+        self.assertEqual(lr0Items.dotBeforeSymbol("aaafa_0-=@K", True), 'K')
+        self.assertEqual(lr0Items.dotBeforeSymbol("aaaaaaaa@FGaaaa", True), 'F')
+        self.assertEqual(lr0Items.dotBeforeSymbol("@M", True), 'M')
+        self.assertEqual(lr0Items.dotBeforeSymbol("@+Gaaaa", True), False)
+        self.assertEqual(lr0Items.dotBeforeSymbol("-FGaaaa@b", True), False)
+        self.assertEqual(lr0Items.dotBeforeSymbol("aaaa@aGaaaa", True), False)
 
     def testClosure(self):
         lr0Items = LR0Items("input.txt")
@@ -58,6 +58,16 @@ class TestLR0Items(unittest.TestCase):
 
     def testGoto(self):
         lr0Items = LR0Items("input.txt")
+
+    def testRhsWithSymbol(self):
+        lr0Items = LR0Items("input.txt")
+        self.assertEqual(lr0Items.rhsWithSymbol("E+@T"), "E+@T")
+        self.assertFalse(lr0Items.rhsWithSymbol("E+T@"))
+        self.assertEqual(
+            lr0Items.rhsWithSymbol(";laks10938475)(&#$)@;alkdsne93"),
+                                     ";laks10938475)(&#$)@;alkdsne93"
+        )
+
         
 if __name__ == '__main__':
 	unittest.main()

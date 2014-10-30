@@ -30,14 +30,22 @@ class LR0Items:
         return symbols
 
     def printAugmentedGrammar(self):
-        print("\nAugmented Grammar\n-----------------")
+        print("Augmented Grammar\n-----------------")
         for tup in self.aug_productions:
             print("%s->%s" % (tup[0], tup[1]))
 
-    def dotBeforeNonTerminal(self, RHS):
-        regex = re.compile(r'@([A-Z])')
+    def dotBeforeSymbol(self, RHS, nonTerminal=False):
+        if nonTerminal:
+            regex = re.compile(r'@([A-Z])')
+        else:
+            regex = re.compile(r'@(.)')
         result = regex.search(RHS)
         return False if not result else result.group(1).strip('@')
+
+    def rhsWithSymbol(self, RHS):
+        regex = re.compile(r'.*@.+')
+        result = regex.search(RHS)
+        return False if not result else result.group()
 
     def closure(self, LHS, RHS):
         J = [(LHS, RHS)]
@@ -46,7 +54,7 @@ class LR0Items:
         while(added):
             added = False
             for item in J:
-                nextClosureChar = self.dotBeforeNonTerminal(item[1])
+                nextClosureChar = self.dotBeforeSymbol(item[1], True)
                 if nextClosureChar and nextClosureChar not in done:
                     done.append(nextClosureChar)
                     for prod in self.aug_productions[1:]:
@@ -78,17 +86,33 @@ class LR0Items:
                         added = True
         return C
 
+    def printOutput(self, data):
+        print("\nSets of LR(0) Items\n-------------------")
+        for set_of_items in range(len(data)):
+            print("I%s:" % set_of_items)
+            examinedGotoSymbols = []
+            for item in data[set_of_items]:
+                itemString = "%s->%s" % (item[0], item[1])
+                gotoSymbol = self.dotBeforeSymbol(item[1])
+                if gotoSymbol and gotoSymbol not in examinedGotoSymbols:
+                    examinedGotoSymbols.append(gotoSymbol)
+                    gotoState = self.getGotoState(data, self.rhsWithSymbol(item[1]))
+                    print("   %-20s goto(%s)=I%s" % (itemString, gotoSymbol, gotoState))
+                else:
+                    print("   %-20s" % itemString)
+            print()
+    
+    def getGotoState(self, data, rhs):
+        symbol = self.dotBeforeSymbol(rhs)
+        gotoString = rhs.replace("@%s" % symbol, "%s@" % symbol)
+        for set_of_items in range(len(data)):
+            for item in data[set_of_items]:
+                if item[1] == gotoString:
+                    return set_of_items
+
+
+
 lr0Items = LR0Items()
 lr0Items.printAugmentedGrammar()
-print("\nSets of LR(0) Items\n-------------------")
-output = lr0Items.items()
-
-def printOutput(data):
-    for set_of_items in range(len(data)):
-        print("I%s:" % set_of_items)
-        for item in data[set_of_items]:
-            print("    %s->%s" % (item[0], item[1]) + '{:>20}'.format('goto(stuff)'))
-           
-            
-
-printOutput(output)
+result = lr0Items.items()
+lr0Items.printOutput(result)
