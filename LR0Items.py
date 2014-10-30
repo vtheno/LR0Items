@@ -111,8 +111,8 @@ class LR0Items:
                     return set_of_items
 
 
-
-lr0Items = LR0Items()
-lr0Items.printAugmentedGrammar()
-result = lr0Items.items()
-lr0Items.printOutput(result)
+if __name__ == "__main__":
+    lr0Items = LR0Items()
+    lr0Items.printAugmentedGrammar()
+    result = lr0Items.items()
+    lr0Items.printOutput(result)
