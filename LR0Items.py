@@ -74,7 +74,7 @@ class LR0Items:
 
     def items(self):
         C = []
-        C.append(self.closure("'", "@E"))
+        C.append(self.closure("'", "@%s" % self.productions[0]))
         added = True
         while(added):
             added = False
