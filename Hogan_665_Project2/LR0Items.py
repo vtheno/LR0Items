@@ -79,12 +79,7 @@ class LR0Items:
         for item in set_of_items:
             if ("@%s" % symbol) in item[1]:
                 new_RHS = item[1].replace("@%s" % symbol, "%s@" % symbol)
-                res = self.closure(item[0], new_RHS)
-                if type(res) is list:
-                    for r in res:
-                        if r not in goto_result:
-                            goto_result.append(r)
-                 
+                goto_result.extend(self.closure(item[0], new_RHS))
         return goto_result
 
     #The main function to calculate LR(0) items.

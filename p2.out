@@ -1,0 +1,213 @@
+Augmented Grammar
+-----------------
+'->S
+S->
+S->ST
+T->E;
+T->i(E)T
+T->i(E)TeT
+E->n=E
+E->E+E
+E->E-E
+E->E*E
+E->E/E
+E->-E
+E->n
+
+Sets of LR(0) Items
+-------------------
+I0:
+   '->@S                goto(S)=I1
+   S->@                
+   S->@ST              
+
+I1:
+   '->S@               
+   S->S@T               goto(T)=I2
+   T->@E;               goto(E)=I3
+   T->@i(E)T            goto(i)=I4
+   T->@i(E)TeT         
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+
+I2:
+   S->ST@              
+
+I3:
+   T->E@;               goto(;)=I7
+   E->E@+E              goto(+)=I8
+   E->E@-E              goto(-)=I9
+   E->E@*E              goto(*)=I10
+   E->E@/E              goto(/)=I11
+
+I4:
+   T->i@(E)T            goto(()=I12
+   T->i@(E)TeT         
+
+I5:
+   E->n@=E              goto(=)=I13
+   E->n@               
+
+I6:
+   E->-@E               goto(E)=I14
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+
+I7:
+   T->E;@              
+
+I8:
+   E->E+@E              goto(E)=I15
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+
+I9:
+   E->E-@E              goto(E)=I16
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+
+I10:
+   E->E*@E              goto(E)=I17
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+
+I11:
+   E->E/@E              goto(E)=I18
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+
+I12:
+   T->i(@E)T            goto(E)=I19
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+   T->i(@E)TeT         
+
+I13:
+   E->n=@E              goto(E)=I20
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+
+I14:
+   E->-E@              
+   E->E@+E              goto(+)=I8
+   E->E@-E              goto(-)=I9
+   E->E@*E              goto(*)=I10
+   E->E@/E              goto(/)=I11
+
+I15:
+   E->E+E@             
+   E->E@+E              goto(+)=I8
+   E->E@-E              goto(-)=I9
+   E->E@*E              goto(*)=I10
+   E->E@/E              goto(/)=I11
+
+I16:
+   E->E-E@             
+   E->E@+E              goto(+)=I8
+   E->E@-E              goto(-)=I9
+   E->E@*E              goto(*)=I10
+   E->E@/E              goto(/)=I11
+
+I17:
+   E->E*E@             
+   E->E@+E              goto(+)=I8
+   E->E@-E              goto(-)=I9
+   E->E@*E              goto(*)=I10
+   E->E@/E              goto(/)=I11
+
+I18:
+   E->E/E@             
+   E->E@+E              goto(+)=I8
+   E->E@-E              goto(-)=I9
+   E->E@*E              goto(*)=I10
+   E->E@/E              goto(/)=I11
+
+I19:
+   T->i(E@)T            goto())=I21
+   E->E@+E              goto(+)=I8
+   E->E@-E              goto(-)=I9
+   E->E@*E              goto(*)=I10
+   E->E@/E              goto(/)=I11
+   T->i(E@)TeT         
+
+I20:
+   E->n=E@             
+   E->E@+E              goto(+)=I8
+   E->E@-E              goto(-)=I9
+   E->E@*E              goto(*)=I10
+   E->E@/E              goto(/)=I11
+
+I21:
+   T->i(E)@T            goto(T)=I22
+   T->@E;               goto(E)=I3
+   T->@i(E)T            goto(i)=I4
+   T->@i(E)TeT         
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+   T->i(E)@TeT         
+
+I22:
+   T->i(E)T@           
+   T->i(E)T@eT          goto(e)=I23
+
+I23:
+   T->i(E)Te@T          goto(T)=I24
+   T->@E;               goto(E)=I3
+   T->@i(E)T            goto(i)=I4
+   T->@i(E)TeT         
+   E->@n=E              goto(n)=I5
+   E->@E+E             
+   E->@E-E             
+   E->@E*E             
+   E->@E/E             
+   E->@-E               goto(-)=I6
+   E->@n               
+
+I24:
+   T->i(E)TeT@         
+
